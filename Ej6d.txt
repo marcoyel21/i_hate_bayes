@@ -1,0 +1,21 @@
+model
+{
+#Likelihood
+#Space eq.
+for (i in 1:n) {
+	y[i] ~ dpois(mu[i])
+	}
+#State eq.
+for (i in 2:n) {
+	mu[i] ~ dgamma(tau.b,b[i])
+	b[i] <- tau.b/mu[i-1]
+	}
+#Priors 
+mu[1] ~ dgamma(0.001,0.001)
+tau.b ~ dgamma(0.001,0.001)
+#tau.b ~ dgamma(200,1)
+
+#Prediction 1
+for (i in 1:n) { yf1[i] ~ dpois(mu[i]) }
+
+}

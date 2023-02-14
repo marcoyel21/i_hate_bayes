@@ -1,0 +1,26 @@
+model
+{
+#Likelihood
+for (i in 1:n) {
+	y[i] ~ dnorm(mu[i],tau)
+	mu[i]<-alpha+w[i]
+	w0[i]<-0
+	}
+#Priors 
+alpha ~ dnorm(0,0.001)
+tau ~ dgamma(0.1,0.1)
+w[1:n] ~ spatial.exp(w0[],s1[],s2[],tau.w,phi,1)
+tau.w ~ dgamma(0.1,0.1)
+phi ~ dgamma(0.1,0.1)
+#Prediction 1
+for (i in 1:n) { yf1[i] ~ dnorm(mu[i],tau) }
+#Prediction 2
+#wf[1:m] ~ spatial.pred(w0f[],s1f[],s2f[],w[])
+for (i in 1:m) { 
+	yf2[i] ~ dnorm(muf[i],tau) 
+	muf[i]<-alpha+wf[i]
+	w0f[i]<-0
+	wf[i] ~ spatial.unipred(w0f[i],s1f[i],s2f[i],w[])
+}
+
+}

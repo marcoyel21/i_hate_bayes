@@ -1,0 +1,23 @@
+model
+{
+#Likelihood
+for (i in 1:n) {
+	y[i] ~ dpois(mu[i])
+	mu[i]<-ne[i]*lambda[i]
+	log(lambda[i])<-beta[1]+beta[2]*x[i]
+	}
+#Priors 
+for (j in 1:2) { beta[j] ~ dnorm(0,0.001) }
+#Prediction 1
+for (i in 1:n) { yf1[i] ~ dpois(mu[i]) }
+#Prediction 2
+#for (i in 1:m) { 
+#	yf2[i] ~ dpois(muf[i]) 
+#	muf[i]<-nef[i]*lambdaf[i]
+#	log(lambdaf[i])<-beta[1]+beta[2]*xf[i]
+#}
+	yf2 ~ dpois(muf) 
+	muf<-nef*lambdaf
+	log(lambdaf)<-beta[1]+beta[2]*xf
+
+}

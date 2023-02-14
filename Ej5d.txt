@@ -1,0 +1,22 @@
+model
+{
+#Likelihood
+for (i in 1:n) {
+	y[i] ~ dbeta(a[i],b[i])
+	a[i]<-phy*mu[i]
+	b[i]<-phy*(1-mu[i])
+#	logit(mu[i])<-beta[1]+beta[2]*x[i]
+	eta[i]<-beta[1]+beta[2]*x[i]
+	mu[i]<-exp(eta[i])/(1+exp(eta[i]))
+	}
+#Priors 
+phy ~ dgamma(0.01,0.01)
+for (j in 1:2) { beta[j] ~ dnorm(0,0.001) }
+#Prediction 1
+for (i in 1:n) { yf1[i] ~ dbeta(a[i],b[i]) }
+#Prediction 2
+	yf2 ~ dbeta(af,bf) 
+	af<-phy*muf
+	bf<-phy*(1-muf)
+	logit(muf)<-beta[1]+beta[2]*xf
+}

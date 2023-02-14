@@ -1,0 +1,11 @@
+model
+{
+#Likelihood
+for (i in 1:n) {
+	y[i] ~ dbin(p,ne[i])
+}
+#Priors 
+p ~ dbeta(1,1)
+#Prediction 1
+for (i in 1:n) { yf1[i] ~ dbin(p,ne[i]) }
+}

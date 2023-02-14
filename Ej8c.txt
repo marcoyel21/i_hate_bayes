@@ -1,0 +1,15 @@
+model
+{
+#Likelihood
+for (i in 1:n) {
+	y[i] ~ dbin(p[i],ne[i])
+}
+#Priors 
+for (j in 1:n) { p[j] ~ dbeta(a,b) }
+a ~ dgamma(0.01,0.01)
+b ~ dgamma(0.01,0.01)
+#Prediction 1
+for (i in 1:n) { yf1[i] ~ dbin(p[i],ne[i]) }
+#Quantities of interest
+eta <- a/(a+b)
+}

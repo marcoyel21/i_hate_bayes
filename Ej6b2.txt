@@ -1,0 +1,25 @@
+model
+{
+#Likelihood
+for (i in 1:n) {
+#Neg Binomial
+	y[i] ~ dnegbin(p[i],r)
+	eta[i]<-beta[1]+beta[2]*step(x[i]-tau)
+#	logit(1-p[i])<-eta[i]
+	p[i]<-1/(1+exp(eta[i]))
+	mu[i]<-r*(1-p[i])/p[i]
+	}
+#Priors 
+for (j in 1:2) { beta[j] ~ dnorm(0,0.001) }
+aux2 ~ dcat(a[])
+tau <- aux2 + 1850
+for (j in 1:112) { a[j]<- 1/112}
+#Neg Binomial
+aux ~ dpois(10)
+r <- aux + 1
+
+#Prediction 1
+#Neg Binomial
+for (i in 1:n) { yf1[i] ~ dnegbin(p[i],r) }
+
+}

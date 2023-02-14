@@ -1,0 +1,36 @@
+model
+{
+#Likelihood
+for (i in 1:n) {
+	y[i] ~ dbin(p[i],ne[i])
+	mu[i]<-ne[i]*p[i]
+#Liga logistica
+#	logit(p[i])<-beta[1]+beta[2]*x[i]
+#	eta[i]<-beta[1]+beta[2]*x[i]
+#	p[i]<-exp(eta[i])/(1+exp(eta[i]))
+#Liga probit
+#	p[i]<-phi(beta[1]+beta[2]*x[i])
+#Liga log-log
+#	eta[i]<-beta[1]+beta[2]*x[i]
+#	p[i]<-exp(-exp(eta[i]))
+#Liga clog-log
+	cloglog(p[i])<-beta[1]+beta[2]*x[i]
+	}
+#Priors 
+for (j in 1:2) { beta[j] ~ dnorm(0,0.001) }
+#Prediction 1
+for (i in 1:n) { yf1[i] ~ dbin(p[i],ne[i]) }
+#Prediction 2
+#for (i in 1:m) { 
+#	yf2[i] ~ dpois(pf[i],nef[i]) 
+#	muf[i]<-nef[i]*pf[i]
+#	logit(pf[i])<-beta[1]+beta[2]*xf[i]
+#}
+	yf2 ~ dbin(pf,nef) 
+	muf<-nef*pf
+#	logit(pf)<-beta[1]+beta[2]*xf
+#	pf<-phi(beta[1]+beta[2]*xf)
+#	etaf<-beta[1]+beta[2]*xf
+#	pf<-exp(-exp(etaf))
+	cloglog(pf)<-beta[1]+beta[2]*xf	
+}

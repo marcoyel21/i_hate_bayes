@@ -1,0 +1,18 @@
+model
+{
+#Likelihood
+for (i in 1:n) {
+	y[i] ~ dpois(mu[i])
+	mu[i]<-lambda[i]*ee[i]
+	log(lambda[i])<-beta[1]+beta[2]*x[i]+theta[i]+phi[i]
+	}
+#Priors 
+for (i in 1:2) { beta[i] ~ dnorm(0,0.001) }
+for (i in 1:n) { theta[i] ~ dnorm(0,tau.t) }
+tau.t ~ dgamma(0.001,0.001)
+phi[1:n] ~ car.normal(adj[],weights[],num[],tau.c)
+tau.c ~ dgamma(0.1,0.1)
+#Prediction 
+for (i in 1:n) { yf[i] ~ dpois(mu[i]) }
+
+}

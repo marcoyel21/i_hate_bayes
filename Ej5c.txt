@@ -1,0 +1,25 @@
+model
+{
+#Likelihood
+for (i in 1:n) {
+	y[i] ~ dnegbin(p[i],ne[i])
+	mu[i]<-ne[i]*lambda[i]
+	lambda[i]<-(1-p[i])/p[i]
+	eta[i]<-beta[1]+beta[2]*x[i]
+#	logit(1-p[i])<-eta[i]
+	p[i]<-1/(1+exp(eta[i]))
+	}
+#Priors 
+for (j in 1:2) { beta[j] ~ dnorm(0,0.001) }
+#Prediction 1
+for (i in 1:n) { yf1[i] ~ dnegbin(p[i],ne[i]) }
+#Prediction 2
+#for (i in 1:m) { 
+#	yf2[i] ~ dnegbin(pf[i],nef[i]) 
+#	etaf[i]<-beta[1]+beta[2]*xf[i]
+#	pf[i]<-1/(1+exp(etaf[i])
+#}
+	yf2 ~ dnegbin(pf,nef) 
+	etaf<-beta[1]+beta[2]*xf
+	pf<-1/(1+exp(etaf))
+}
